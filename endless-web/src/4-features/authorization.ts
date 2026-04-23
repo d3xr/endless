@@ -11,16 +11,21 @@ import { zmPreferenceStorage } from '6-shared/api/zmPreferenceStorage'
 import { getDemoData, generatePersonaDiff, getPersonaById, type PersonaId } from 'demoData'
 
 export const logOut = (): AppThunk => (dispatch, getState) => {
-  workerMethods.clearStorage()
-  dispatch(resetData())
-  dispatch(setToken(null))
-  dispatch(clearLocalData())
-  tokenStorage.clear()
+  // Clear persona-scoped localStorage BEFORE dispatching Redux actions.
+  // resetData() triggers a re-render which recomputes the Savings page
+  // asset projections; if localStorage still held the previous persona's
+  // data at that moment, the memo would latch onto stale values until the
+  // next account-list change.
   try {
     localStorage.removeItem('endless_assets')
     localStorage.removeItem('endless_current_salary')
     localStorage.removeItem('endless_behavioral_scenarios')
   } catch {}
+  workerMethods.clearStorage()
+  dispatch(resetData())
+  dispatch(setToken(null))
+  dispatch(clearLocalData())
+  tokenStorage.clear()
 }
 
 export const logIn =
@@ -72,11 +77,6 @@ export const loadDemoData =
         persona: persona?.bio.headline,
         transactions: diff.transaction?.length,
       })
-      // TODO: maybe later make more elegant solution for local data
-      tokenStorage.set(zenmoney.fakeToken)
-      dispatch(setToken(zenmoney.fakeToken))
-      dispatch(applyServerPatch(diff))
-      dispatch(saveDataLocally())
 
       // Per-persona physical assets + current salary + behavioural
       // trajectory power the Savings (Capital) projection page. Empty
@@ -84,6 +84,13 @@ export const loadDemoData =
       // significant physical assets. behavioralScenarios overrides the
       // macro salaryMultipliers/savingsRateByYear fallback so each persona
       // gets their own three-scenario life path.
+      //
+      // CRITICAL: write localStorage BEFORE applyServerPatch. The patch
+      // updates Redux account list, which triggers the useAssetProjections
+      // memo to recompute and read these same keys. If we wrote them after,
+      // the memo would fire against stale (just-cleared) localStorage and
+      // fall back to DEFAULT_ASSETS / FALLBACK_SALARY, leaving the Capital
+      // page stuck on generics until the next account-list change.
       if (persona) {
         try {
           localStorage.setItem(
@@ -100,6 +107,12 @@ export const loadDemoData =
           )
         } catch {}
       }
+
+      // TODO: maybe later make more elegant solution for local data
+      tokenStorage.set(zenmoney.fakeToken)
+      dispatch(setToken(zenmoney.fakeToken))
+      dispatch(applyServerPatch(diff))
+      dispatch(saveDataLocally())
     } catch (error) {
       console.error(error)
     }

@@ -61,8 +61,15 @@ function loadBehavioralScenarios(): BehavioralScenariosMap | null {
   return null
 }
 
+/** External-facing hook: returns the currently-active persona's real assets.
+ *  Ties its memo to the Redux account list so switching persona
+ *  (applyServerPatch → new accounts) invalidates the cache and forces a
+ *  fresh localStorage read. Without this, useMemo([]) would cache the
+ *  first-mount value and the Capital page would show the previous
+ *  persona's assets after a hot-swap. */
 export function useAssets(): RealAsset[] {
-  return useMemo(() => loadAssets(), [])
+  const allAccounts = accountModel.useAccountList()
+  return useMemo(() => loadAssets(), [allAccounts])
 }
 
 /** Apply scenario growth rates to an asset's phases. */
@@ -80,10 +87,15 @@ function applyScenarioToAsset(asset: RealAsset, scenario: ScenarioParams): RealA
 
 /** Project everything under a single coherent scenario. */
 export function useAssetProjections(scenarioKey: ScenarioKey = 'conservative') {
-  const baseAssets = useAssets()
   const allAccounts = accountModel.useAccountList()
 
   return useMemo(() => {
+    // Re-read localStorage inside the memo so persona switches (new
+    // allAccounts → memo invalidated) pick up the freshly-written
+    // persona data. Reading outside the memo (via useAssets) worked for
+    // the first render but not for hot-swaps.
+    const baseAssets = loadAssets()
+
     // Merge per-persona behavioural trajectory on top of macro. Computed
     // inside the memo so the merged object doesn't destabilise deps. If no
     // persona is active we keep the generic fallback shipped in
@@ -177,5 +189,5 @@ export function useAssetProjections(scenarioKey: ScenarioKey = 'conservative') {
     const monthlySavings = Math.round(currentSalary * scenario.savingsRateByYear[0])
 
     return { assets, projections, netWorth, liquidNow, monthlySavings, scenario }
-  }, [baseAssets, allAccounts, scenarioKey])
+  }, [allAccounts, scenarioKey])
 }
