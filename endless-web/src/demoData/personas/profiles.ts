@@ -202,7 +202,8 @@ export const PERSONAS: Persona[] = [
       accounts: [
         { key: 'sber-salary', title: 'Сбер Зарплатная', type: 'checking', bank: 'Сбер', openingBalance: 18_000 },
         { key: 'tinkoff-black', title: 'Т-Банк Black', type: 'ccard', bank: 'Т-Банк', openingBalance: 0 },
-        { key: 'sber-deposit', title: 'Сбер Вклад «Лучший%»', type: 'deposit', bank: 'Сбер', openingBalance: 180_000 },
+        { key: 'sber-deposit', title: 'Сбер Вклад «Лучший%»', type: 'deposit', bank: 'Сбер', openingBalance: 85_000 },
+        { key: 'sber-mortgage', title: 'Сбер Ипотека (двушка)', type: 'debt', bank: 'Сбер', openingBalance: -3_800_000 },
         { key: 'cash-wallet', title: 'Кошелёк', type: 'cash', openingBalance: 3_000 },
       ],
       budget: {
@@ -217,7 +218,7 @@ export const PERSONAS: Persona[] = [
         health: 2_000,
         kids: 6_500,
         parents: 3_000,
-        savings: 8_000,
+        savings: 3_500,
         fuelIfCar: 6_500,
         carMaintenance: 4_000,
         miscellaneous: 2_500,
@@ -244,6 +245,9 @@ export const PERSONAS: Persona[] = [
           currentValue: 5_400_000,
           currentValueDate: '2026-04-01',
           growthPhases: [],
+          linkedLoanAccountId: 'alexey-accountant-sber-mortgage',
+          // Ипотека на 15 лет, взята 2019-06. Осталось ~9 лет → до 2035-06.
+          loanEndDate: '2035-06-01',
         },
         {
           id: 'alexey-car',
@@ -258,20 +262,23 @@ export const PERSONAS: Persona[] = [
         },
       ],
       behavioralScenarios: {
-        // Стройбаза закрылась в кризис, полгода без работы, устроился в меньшую контору с меньшей зарплатой
+        // Стройбаза закрылась в кризис, полгода без работы, устроился в меньшую контору с меньшей зарплатой.
+        // При падении зарплаты + фиксированной ипотеке 38К «откладывать» практически невозможно.
         negative: {
           salaryMultipliers: [1.00, 1.02, 0.88, 0.85, 0.92, 1.00, 1.08, 1.15, 1.20, 1.25, 1.30],
-          savingsRateByYear: [0.08, 0.05, 0.02, 0.00, 0.02, 0.05, 0.07, 0.08, 0.08, 0.10, 0.10],
+          savingsRateByYear: [0.03, 0.02, 0.01, 0.00, 0.01, 0.02, 0.03, 0.04, 0.04, 0.05, 0.05],
         },
-        // Ведущий → главбух, компания стабильна, индексация на 6% в год
+        // Ведущий → главбух, компания стабильна, индексация ~6%/год. Ипотека 38К съедает
+        // половину зарплаты → реалистичный savings rate 5-9%, как показывает его текущий бюджет.
         conservative: {
           salaryMultipliers: [1.00, 1.06, 1.12, 1.19, 1.27, 1.36, 1.45, 1.55, 1.65, 1.75, 1.86],
-          savingsRateByYear: [0.11, 0.11, 0.12, 0.12, 0.13, 0.13, 0.14, 0.14, 0.15, 0.15, 0.15],
+          savingsRateByYear: [0.05, 0.05, 0.06, 0.06, 0.07, 0.07, 0.08, 0.08, 0.08, 0.09, 0.09],
         },
-        // Перешёл в крупный федеральный ритейлер — главбух дочки, затем финдир
+        // Перешёл в крупный федеральный ритейлер — главбух дочки, затем финдир.
+        // С ростом зарплаты и выплатой ипотеки savings rate постепенно растёт.
         optimistic: {
           salaryMultipliers: [1.00, 1.12, 1.28, 1.50, 1.75, 2.10, 2.40, 2.70, 3.00, 3.30, 3.60],
-          savingsRateByYear: [0.14, 0.17, 0.20, 0.22, 0.24, 0.25, 0.27, 0.28, 0.30, 0.30, 0.30],
+          savingsRateByYear: [0.08, 0.10, 0.12, 0.14, 0.16, 0.18, 0.20, 0.22, 0.24, 0.26, 0.28],
         },
       },
     },
@@ -526,6 +533,8 @@ export const PERSONAS: Persona[] = [
           currentValueDate: '2026-04-01',
           growthPhases: [],
           linkedLoanAccountId: 'dmitry-it-sber-mortgage',
+          // Ипотека взята 2021-09 на 22 года. Осталось ~17 лет → до 2043-09.
+          loanEndDate: '2043-09-01',
         },
         {
           id: 'dmitry-car',
@@ -686,7 +695,11 @@ export const PERSONAS: Persona[] = [
         },
         {
           id: 'nikolay-commercial',
-          type: 'other',
+          // Коммерческое помещение в промзоне Краснодара — ближе к «дому»
+          // по динамике (отдельно стоящее, зависит от локации), чем к
+          // многоквартирной «квартире». Позволяет сценарию houseGrowth
+          // применяться автоматически.
+          type: 'house',
           name: 'Помещение под автосервис',
           emoji: '🏭',
           sqm: 210,
