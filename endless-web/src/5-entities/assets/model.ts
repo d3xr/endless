@@ -8,11 +8,18 @@ import { ScenarioKey, SCENARIOS, ScenarioParams } from './scenarios'
 
 const STORAGE_KEY = 'endless_assets'
 const SALARY_KEY = 'endless_current_salary'
+const BEHAVIORAL_KEY = 'endless_behavioral_scenarios'
 const PROJECTION_MONTHS = 120
 /** Fallback salary when no persona has been loaded. Deliberately generic —
  *  a mid-market office worker's net. Per-persona salary is injected into
  *  localStorage by loadDemoData(). */
 const FALLBACK_SALARY = 120_000
+
+interface BehavioralPair {
+  salaryMultipliers: number[]
+  savingsRateByYear: number[]
+}
+type BehavioralScenariosMap = Record<ScenarioKey, BehavioralPair>
 
 function loadAssets(): RealAsset[] {
   try {
@@ -31,6 +38,27 @@ function loadCurrentSalary(): number {
     }
   } catch {}
   return FALLBACK_SALARY
+}
+
+/** Per-persona behavioural override (career trajectory + savings discipline).
+ *  When a persona is active, loadDemoData() writes all 3 scenarios here so
+ *  the user can flip between negative/conservative/optimistic for a single
+ *  persona. `null` means no override — use the macro fallback. */
+function loadBehavioralScenarios(): BehavioralScenariosMap | null {
+  try {
+    const raw = localStorage.getItem(BEHAVIORAL_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw) as BehavioralScenariosMap
+      if (
+        parsed?.negative?.salaryMultipliers &&
+        parsed?.conservative?.salaryMultipliers &&
+        parsed?.optimistic?.salaryMultipliers
+      ) {
+        return parsed
+      }
+    }
+  } catch {}
+  return null
 }
 
 export function useAssets(): RealAsset[] {
@@ -54,9 +82,22 @@ function applyScenarioToAsset(asset: RealAsset, scenario: ScenarioParams): RealA
 export function useAssetProjections(scenarioKey: ScenarioKey = 'conservative') {
   const baseAssets = useAssets()
   const allAccounts = accountModel.useAccountList()
-  const scenario = SCENARIOS[scenarioKey]
 
   return useMemo(() => {
+    // Merge per-persona behavioural trajectory on top of macro. Computed
+    // inside the memo so the merged object doesn't destabilise deps. If no
+    // persona is active we keep the generic fallback shipped in
+    // scenarios.ts.
+    const macroScenario = SCENARIOS[scenarioKey]
+    const behavioral = loadBehavioralScenarios()
+    const scenario: ScenarioParams = behavioral
+      ? {
+          ...macroScenario,
+          salaryMultipliers: behavioral[scenarioKey].salaryMultipliers,
+          savingsRateByYear: behavioral[scenarioKey].savingsRateByYear,
+        }
+      : macroScenario
+
     const now = new Date()
 
     // Loan balances from ZenMoney
@@ -136,5 +177,5 @@ export function useAssetProjections(scenarioKey: ScenarioKey = 'conservative') {
     const monthlySavings = Math.round(currentSalary * scenario.savingsRateByYear[0])
 
     return { assets, projections, netWorth, liquidNow, monthlySavings, scenario }
-  }, [baseAssets, allAccounts, scenario, scenarioKey])
+  }, [baseAssets, allAccounts, scenarioKey])
 }

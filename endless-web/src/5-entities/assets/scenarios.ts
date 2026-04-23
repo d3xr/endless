@@ -5,6 +5,14 @@
  *   - Negative: global/RU recession, stagnation, low savings discipline
  *   - Conservative: current trajectory, moderate growth
  *   - Optimistic: strong economy, career growth, high discipline
+ *
+ * Macro fields (inflation, real-estate growth, car depreciation, FX) apply
+ * the same to every persona — the market doesn't care who you are.
+ * Behavioural fields (salaryMultipliers, savingsRateByYear) are FALLBACKS
+ * used only when no persona is active. When a persona is loaded,
+ * loadDemoData() injects the persona's own three-scenario behavioural
+ * trajectory (see PersonaBehavioralScenarios in demoData/personas/types.ts)
+ * into localStorage and the Savings projection reads it from there.
  */
 
 export type ScenarioKey = 'negative' | 'conservative' | 'optimistic'
@@ -16,9 +24,11 @@ export interface ScenarioParams {
   description: string
   /** Investment return on liquid savings (annual nominal) */
   liquidReturn: number
-  /** Salary growth multipliers by year (cumulative from year 0) */
+  /** FALLBACK salary growth multipliers (year 0 = 1.00). Generic mid-market
+   *  shape — overridden per persona when a demo persona is active. */
   salaryMultipliers: number[]
-  /** Savings rate by year */
+  /** FALLBACK savings rate by year. Generic mid-market shape —
+   *  overridden per persona when a demo persona is active. */
   savingsRateByYear: number[]
   /** Real estate growth phases: [years, annualRate][] for apartments */
   apartmentGrowth: [number, number][]
@@ -43,17 +53,9 @@ export const SCENARIOS: Record<ScenarioKey, ScenarioParams> = {
     description: 'Глубокий кризис + депрессия: потеря работы, выгорание, копить не получается',
     // Инфляция ~12%/год, рынки падают, рубль девальвирует → реально −5%
     liquidReturn: -0.05,
-    // Потеря работы в год 2, долгое восстановление, второй удар на 8-м году
-    salaryMultipliers: [
-      1.00, 1.05, 1.08, 0.92,  // год 3: потеря работы на полгода → откат
-      0.95, 1.05, 1.15, 1.20,  // медленный подъём без карьерного роста
-      1.05, 1.15, 1.30,        // год 8: второе сокращение, восстановление
-    ],
-    // Depression arc: в тяжёлые годы копить не получается ВООБЩЕ
-    savingsRateByYear: [
-      0.15, 0.08, 0.02, 0.00, 0.03, // 2026-2030: провал, депрессия, 0% сбережений
-      0.05, 0.08, 0.05, 0.03, 0.07, 0.10, // 2031-2036: пытаешься вернуться, но идёт тяжело
-    ],
+    // Generic mid-market fallback — persona override takes precedence
+    salaryMultipliers: [1.00, 1.00, 0.95, 0.93, 0.96, 1.02, 1.10, 1.15, 1.18, 1.22, 1.28],
+    savingsRateByYear: [0.10, 0.05, 0.00, 0.00, 0.03, 0.05, 0.08, 0.08, 0.10, 0.10, 0.10],
     apartmentGrowth: [
       [2, 0.00],    // стагнация
       [2, -0.09],   // обвал −25% за 18 мес (как крупные регионы в 2008-2009)
@@ -82,14 +84,9 @@ export const SCENARIOS: Record<ScenarioKey, ScenarioParams> = {
     color: '#66bb6a',
     description: 'Текущая траектория: стабильная карьера, 25-30% сбережений, умеренные рынки',
     liquidReturn: 0.06,   // 60/40, но с учётом российских рисков
-    salaryMultipliers: [
-      1.00, 1.06, 1.12, 1.19, 1.26, // рост на инфляцию + 2% реальных
-      1.38, 1.50, 1.60, 1.72, 1.85, 2.00,
-    ],
-    savingsRateByYear: [
-      0.25, 0.25, 0.25, 0.26, 0.26,
-      0.27, 0.27, 0.28, 0.28, 0.28, 0.28,
-    ],
+    // Generic mid-market fallback — persona override takes precedence
+    salaryMultipliers: [1.00, 1.06, 1.12, 1.19, 1.26, 1.34, 1.43, 1.52, 1.61, 1.70, 1.80],
+    savingsRateByYear: [0.15, 0.15, 0.16, 0.16, 0.17, 0.17, 0.18, 0.18, 0.18, 0.19, 0.19],
     apartmentGrowth: [
       [3, 0.06],   // чуть выше инфляции
       [3, 0.05],
@@ -116,14 +113,9 @@ export const SCENARIOS: Record<ScenarioKey, ScenarioParams> = {
     color: '#42a5f5',
     description: 'Сильная экономика, карьерный рывок, высокая дисциплина, рынки растут',
     liquidReturn: 0.12,   // 100% акции, бычий рынок
-    salaryMultipliers: [
-      1.00, 1.10, 1.22, 1.35, 1.89,  // быстрый карьерный рывок + бонусы
-      2.08, 2.29, 2.52, 3.02, 3.32, 3.80,
-    ],
-    savingsRateByYear: [
-      0.30, 0.30, 0.32, 0.33, 0.35,
-      0.35, 0.37, 0.38, 0.40, 0.40, 0.40,
-    ],
+    // Generic mid-market fallback — persona override takes precedence
+    salaryMultipliers: [1.00, 1.10, 1.22, 1.35, 1.50, 1.68, 1.88, 2.10, 2.35, 2.60, 2.90],
+    savingsRateByYear: [0.22, 0.24, 0.26, 0.28, 0.30, 0.32, 0.33, 0.35, 0.35, 0.35, 0.35],
     apartmentGrowth: [
       [3, 0.15],   // бум крупных региональных центров
       [3, 0.10],

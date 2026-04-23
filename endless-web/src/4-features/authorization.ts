@@ -19,6 +19,7 @@ export const logOut = (): AppThunk => (dispatch, getState) => {
   try {
     localStorage.removeItem('endless_assets')
     localStorage.removeItem('endless_current_salary')
+    localStorage.removeItem('endless_behavioral_scenarios')
   } catch {}
 }
 
@@ -77,9 +78,12 @@ export const loadDemoData =
       dispatch(applyServerPatch(diff))
       dispatch(saveDataLocally())
 
-      // Per-persona physical assets + current salary power the Savings
-      // (Capital) projection page. Empty assets array is valid — it just
-      // means this persona owns no significant physical assets.
+      // Per-persona physical assets + current salary + behavioural
+      // trajectory power the Savings (Capital) projection page. Empty
+      // assets array is valid — it just means this persona owns no
+      // significant physical assets. behavioralScenarios overrides the
+      // macro salaryMultipliers/savingsRateByYear fallback so each persona
+      // gets their own three-scenario life path.
       if (persona) {
         try {
           localStorage.setItem(
@@ -89,6 +93,10 @@ export const loadDemoData =
           localStorage.setItem(
             'endless_current_salary',
             String(persona.finance.income.salaryBase)
+          )
+          localStorage.setItem(
+            'endless_behavioral_scenarios',
+            JSON.stringify(persona.finance.behavioralScenarios)
           )
         } catch {}
       }

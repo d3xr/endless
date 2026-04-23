@@ -75,6 +75,23 @@ export interface MonthlyBudget {
   miscellaneous: number
 }
 
+/** One persona's behavioural trajectory under a single macro scenario.
+ *  Year-indexed arrays must have the same length as the macro scenario
+ *  (11 entries: year 0 through year 10). */
+export interface PersonaBehavioralScenario {
+  /** Salary growth multipliers, cumulative from year 0 (1.00 = baseline). */
+  salaryMultipliers: number[]
+  /** Fraction of net income that goes to savings each year (0..1). */
+  savingsRateByYear: number[]
+}
+
+/** Three coherent life-trajectories for a given persona. */
+export interface PersonaBehavioralScenarios {
+  negative: PersonaBehavioralScenario
+  conservative: PersonaBehavioralScenario
+  optimistic: PersonaBehavioralScenario
+}
+
 export interface PersonaFinance {
   currency: 'RUB'
   monthStartDay: 1
@@ -129,6 +146,12 @@ export interface PersonaFinance {
    *  Used by the Savings/Capital projection page. Empty array = no
    *  significant physical assets (e.g. low-income renter). */
   assets: RealAsset[]
+
+  /** Per-persona career trajectory and savings discipline under each of
+   *  the three macro scenarios. Marco-economics (inflation, real-estate
+   *  growth, currency) stay common across personas in scenarios.ts; this
+   *  is where individual career shape lives. */
+  behavioralScenarios: PersonaBehavioralScenarios
 }
 
 export interface Persona {
