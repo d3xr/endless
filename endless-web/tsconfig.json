@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "src",
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "es2021"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src",
+    "typings/theme.d.ts",
+    "typings/vite-env.d.ts",
+    "typings/i18n.d.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

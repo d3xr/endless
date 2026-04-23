@@ -1,0 +1,196 @@
+import React, { FC, lazy, Suspense, useEffect, useState } from 'react'
+import { Router, Route, Redirect, Switch } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  useMediaQuery,
+  Theme,
+} from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { initTracking, setUserId } from '6-shared/helpers/tracking'
+import { PopoverManager } from '6-shared/historyPopovers'
+import { useAppDispatch, useAppSelector } from 'store'
+import { getLoginState, setToken } from 'store/token'
+import { getLastSyncTime } from 'store/data/selectors'
+import { userModel } from '5-entities/user'
+import { syncData } from '4-features/sync'
+import { tokenStorage, needsPinUnlock } from '6-shared/api/tokenStorage'
+import { PinLockScreen } from '2-pages/Lock'
+import { RegularSyncHandler } from '3-widgets/RegularSyncHandler'
+import Nav from '3-widgets/Navigation'
+import { MobileNavigation } from '3-widgets/Navigation'
+import ErrorBoundary from '3-widgets/ErrorBoundary'
+import Transactions from '2-pages/Transactions'
+import Auth from '2-pages/Auth'
+import Budgets from '2-pages/Budgets'
+import Accounts from '2-pages/Accounts'
+import { GlobalWidgets } from './GlobalWidgets'
+
+const About = lazy(() => import('2-pages/About'))
+const Donation = lazy(() => import('2-pages/Donation'))
+const Token = lazy(() => import('2-pages/Token'))
+const Stats = lazy(() => import('2-pages/Stats'))
+const Analytics = lazy(() => import('2-pages/Analytics'))
+const Planned = lazy(() => import('2-pages/Planned'))
+const Savings = lazy(() => import('2-pages/Savings'))
+const Review = lazy(() => import('2-pages/Review'))
+const Categorize = lazy(() => import('2-pages/Categorize'))
+
+const history = createBrowserHistory()
+
+export default function App() {
+  const dispatch = useAppDispatch()
+  const [locked, setLocked] = useState(() => needsPinUnlock())
+
+  useEffect(() => {
+    initTracking(history)
+  }, [])
+
+  const isLoggedIn = useAppSelector(getLoginState)
+  const lastSync = useAppSelector(getLastSyncTime)
+  const hasData = !!lastSync
+  const userId = userModel.useRootUserId()
+  useEffect(() => {
+    if (userId) setUserId(userId)
+  }, [userId])
+
+  // If we have a token (e.g. promoted from REACT_APP_DEV_TOKEN) but no
+  // data yet, RegularSyncHandler's init may race with token readiness and
+  // skip the first sync. Force one here on mount as a safety net.
+  useEffect(() => {
+    if (isLoggedIn && !lastSync) {
+      dispatch(syncData())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const publicRoutes = [
+    <Route key="about" path="/about" component={About} />,
+    <Route key="about/*" path="/about/*" component={About} />,
+    <Route key="donation" path="/donation" component={Donation} />,
+  ]
+
+  const notLoggedIn = [
+    ...publicRoutes,
+    <Route key="*" path="/*" component={Auth} />,
+  ]
+
+  const loggedInNoData = [
+    ...publicRoutes,
+    <Route key="token" path="/token" component={Token} />,
+    <Route key="*" path="*" component={MainLoader} />,
+  ]
+
+  const loggedInWithData = [
+    ...publicRoutes,
+    <Route key="token" path="/token" component={Token} />,
+    <Route key="transactions" path="/transactions" component={Transactions} />,
+    <Route key="review" path="/review" component={Review} />,
+    <Route key="categorize" path="/categorize" component={Categorize} />,
+    <Route key="accounts" path="/accounts" component={Accounts} />,
+    <Route key="budget" path="/budget" component={Budgets} />,
+    <Route key="planned" path="/planned" component={Planned} />,
+    <Route key="savings" path="/savings" component={Savings} />,
+    <Route key="analytics" path="/analytics" component={Analytics} />,
+    <Route key="stats" path="/stats" component={Stats} />,
+    <Route key="*" path="*" render={() => <Redirect to="/budget" />} />,
+  ]
+
+  const getRoutes = () => {
+    if (!isLoggedIn) return notLoggedIn
+    if (!hasData) return loggedInNoData
+    return loggedInWithData
+  }
+
+  const routes = getRoutes()
+
+  // Gate everything behind PIN lock if encrypted token is set (production)
+  if (locked) {
+    const handleUnlock = (token: string) => {
+      tokenStorage.setSession(token)
+      dispatch(setToken(token))
+      dispatch(syncData())
+      setLocked(false)
+    }
+    return <PinLockScreen onUnlock={handleUnlock} />
+  }
+
+  return (
+    <Router history={history}>
+      <PopoverManager>
+        <RegularSyncHandler />
+        <Layout isLoggedIn={isLoggedIn}>
+          <ErrorBoundary>
+            <Suspense fallback={<FallbackLoader />}>
+              <Switch>{routes}</Switch>
+            </Suspense>
+          </ErrorBoundary>
+        </Layout>
+        <GlobalWidgets />
+      </PopoverManager>
+    </Router>
+  )
+}
+
+const Layout: FC<{
+  isLoggedIn: boolean
+  children: React.ReactNode
+}> = props => {
+  const { isLoggedIn, children } = props
+  return (
+    <Box sx={{ display: 'flex' }}>
+      {isLoggedIn && <Navigation />}
+      <Box sx={{ minHeight: '100vh', flexGrow: 1 }}>{children}</Box>
+    </Box>
+  )
+}
+
+const FallbackLoader = () => (
+  <Box sx={{ display: 'grid', placeContent: 'center', height: '100%' }}>
+    <CircularProgress />
+  </Box>
+)
+
+const Navigation = React.memo(() => {
+  const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'))
+  return isMobile ? <MobileNavigation /> : <Nav />
+})
+
+function MainLoader() {
+  const [hint, setHint] = useState('')
+  const { t } = useTranslation('loadingHints')
+
+  useEffect(() => {
+    const hints = [
+      { hint: t('hint'), delay: 0 },
+      { hint: t('hint_1', 'hint'), delay: 5000 },
+      { hint: t('hint_2', 'hint'), delay: 10000 },
+      { hint: t('hint_3', 'hint'), delay: 30000 },
+      { hint: t('hint_4', 'hint'), delay: 45000 },
+    ]
+    const timers = hints.map(({ hint, delay }) =>
+      setTimeout(() => setHint(hint), delay)
+    )
+    return () => {
+      timers.forEach(timer => clearTimeout(timer))
+    }
+  }, [t])
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+      }}
+    >
+      <CircularProgress />
+      <Box sx={{ mt: 4, width: '200' }}>
+        <Typography align="center">{hint}</Typography>
+      </Box>
+    </Box>
+  )
+}

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files — these contain tokens / OAuth creds and must never be committed.
+# `.env.example` and `.env.demo` are templates and may be committed.
+.env
+.env.local
+.env.*.local
+.env.*.real
+
+# Personal data snapshots the CLI writes to disk
+app/data/
+app/docs/scenarios/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Coverage & caches
+coverage/
+.eslintcache
+.cache/

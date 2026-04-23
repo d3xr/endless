@@ -1,0 +1,241 @@
+import type { SxProps } from '@mui/system'
+import type {
+  ByDate,
+  TDateDraft,
+  TISODate,
+  TTransaction,
+  TTransactionId,
+} from '6-shared/types'
+import type { TrCondition } from '5-entities/transaction'
+
+import React, { useMemo, useState, useCallback, useEffect, FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Box, Typography, Theme } from '@mui/material'
+import { sendEvent } from '6-shared/helpers/tracking'
+import { useDebounce } from '6-shared/hooks/useDebounce'
+import { accountModel } from '5-entities/account'
+import { trModel } from '5-entities/transaction'
+import { getEventPosition } from '3-widgets/global/shared/helpers'
+
+import { GrouppedList } from './GrouppedList'
+import Filter from './TopBar/Filter'
+import Actions from './TopBar/Actions'
+import { Transaction } from './Transaction'
+import { useTrContextMenu } from '3-widgets/global/TrContextMenu'
+import { useAppDispatch } from 'store'
+
+export type TTransactionListProps = {
+  onTrOpen?: (id: TTransactionId) => void
+  opened?: TTransactionId
+  transactions?: TTransaction[]
+  preFilter?: TrCondition
+  hideFilter?: boolean
+  checkedDate?: Date | null
+  initialDate?: TDateDraft
+  sx?: SxProps<Theme>
+}
+
+export const TransactionList: FC<TTransactionListProps> = props => {
+  const {
+    onTrOpen,
+    opened,
+    transactions: transactionObjects,
+    preFilter,
+    hideFilter = false,
+    checkedDate,
+    initialDate,
+    sx,
+  } = props
+
+  const dispatch = useAppDispatch()
+  const [filter, setFilter] = useState<TrCondition | undefined>(undefined)
+  const setCondition = useCallback(
+    (condition?: TrCondition) =>
+      setFilter(filter => {
+        return { ...filter, ...condition }
+      }),
+    []
+  )
+  const handleClearFilter = useCallback(() => {
+    setFilter(undefined)
+  }, [])
+
+  const onFilterByPayee = useCallback(
+    (payee?: string) => setFilter({ search: payee }),
+    []
+  )
+
+  const resultFilter = useMemo(() => {
+    if (preFilter) {
+      return filter ? ({ and: [preFilter, filter] } as TrCondition) : preFilter
+    }
+    return filter
+  }, [filter, preFilter])
+
+  const debouncedFilter = useDebounce(resultFilter, 300)
+
+  const transactions = useMemo(
+    () => transactionObjects?.map(tr => tr.id),
+    [transactionObjects]
+  )
+  const trList = useFilteredTransactions(transactions, debouncedFilter)
+
+  const debtId = accountModel.useDebtAccountId()
+
+  const [checked, setChecked] = useState<TTransactionId[]>([])
+  const uncheckAll = useCallback(() => setChecked([]), [])
+  const checkAll = useCallback(
+    () => setChecked(trList.map(tr => tr.id)),
+    [trList]
+  )
+  const toggleTransaction = useCallback((id: TTransactionId) => {
+    setChecked(current => {
+      return current.includes(id)
+        ? current.filter(checked => id !== checked)
+        : [...current, id]
+    })
+  }, [])
+  const onSelectSimilar = useCallback(
+    (date: Date | number) => {
+      sendEvent('Transaction: select similar')
+      const ids = trList.filter(tr => tr.changed === +date).map(tr => tr.id)
+      setChecked(ids)
+    },
+    [trList]
+  )
+  const onMarkOlderViewed = useCallback(
+    (id: TTransactionId) => {
+      sendEvent('Transaction: mark older viewed')
+      const index = trList.findIndex(tr => tr.id === id)
+      if (index === -1) return
+      const ids = trList
+        .slice(index)
+        .filter(tr => !trModel.isViewed(tr))
+        .map(tr => tr.id)
+      dispatch(trModel.markViewed(ids, true))
+    },
+    [dispatch, trList]
+  )
+
+  const openContextMenu = useTrContextMenu()
+
+  useEffect(() => {
+    if (checkedDate) onSelectSimilar(checkedDate)
+  }, [onSelectSimilar, checkedDate])
+
+  const groups = useMemo(() => {
+    let groups: ByDate<{ date: TISODate; transactions: JSX.Element[] }> = {}
+    trList.forEach(tr => {
+      let Component = (
+        <Transaction
+          key={tr.id}
+          id={tr.id}
+          isOpened={tr.id === opened}
+          isChecked={checked.includes(tr.id)}
+          isInSelectionMode={!!checked.length}
+          onOpen={onTrOpen}
+          onToggle={toggleTransaction}
+          onPayeeClick={onFilterByPayee}
+          onContextMenu={(e, id) =>
+            openContextMenu(
+              { id, onSelectSimilar, onMarkOlderViewed },
+              getEventPosition(e)
+            )
+          }
+        />
+      )
+      groups[tr.date] ??= { date: tr.date, transactions: [] }
+      groups[tr.date].transactions.push(Component)
+    })
+    return Object.values(groups)
+  }, [
+    trList,
+    debtId,
+    opened,
+    checked,
+    onTrOpen,
+    toggleTransaction,
+    onFilterByPayee,
+    openContextMenu,
+    onSelectSimilar,
+    onMarkOlderViewed,
+  ])
+
+  return (
+    <>
+      <Box
+        sx={[
+          {
+            display: 'flex',
+            flexDirection: 'column',
+            px: 1,
+            pt: 1,
+            position: 'relative',
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+      >
+        {!hideFilter && (
+          <Box
+            sx={{
+              position: 'relative',
+              zIndex: 10,
+              maxWidth: 560,
+              width: '100%',
+              mx: 'auto',
+            }}
+          >
+            <Filter
+              conditions={filter}
+              setCondition={setCondition}
+              clearFilter={handleClearFilter}
+            />
+          </Box>
+        )}
+
+        <Actions
+          visible={Boolean(checked?.length)}
+          checkedIds={checked}
+          onUncheckAll={uncheckAll}
+          onCheckAll={checkAll}
+        />
+
+        <Box sx={{ flex: '1 1 auto' }}>
+          {groups.length ? (
+            <GrouppedList {...{ groups, initialDate }} />
+          ) : (
+            <EmptyState />
+          )}
+        </Box>
+      </Box>
+    </>
+  )
+}
+
+function useFilteredTransactions(
+  trIds?: TTransactionId[],
+  conditions?: TrCondition
+) {
+  const transactionsById = trModel.useTransactions()
+  const allTransactionIds = trModel.useSortedTransactionIds()
+  const groups = useMemo(() => {
+    const checker = trModel.checkRaw(conditions)
+    const list = trIds || allTransactionIds
+    return list
+      .map(id => transactionsById[id])
+      .filter(checker)
+      .sort(trModel.compareTrDates)
+  }, [trIds, allTransactionIds, conditions, transactionsById])
+  return groups
+}
+
+const EmptyState = () => {
+  const { t } = useTranslation('transactions')
+  return (
+    <Box sx={{ p: 5 }}>
+      <Typography variant="body1" align="center" sx={{ marginBottom: '16px' }}>
+        {t('emptyState')}
+      </Typography>
+    </Box>
+  )
+}

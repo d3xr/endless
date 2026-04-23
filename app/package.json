@@ -1,0 +1,28 @@
+{
+  "name": "endless",
+  "version": "0.1.0",
+  "description": "AI-powered financial autopilot on top of ZenMoney",
+  "type": "module",
+  "bin": {
+    "endless": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli/index.ts",
+    "sync": "tsx src/cli/index.ts sync",
+    "status": "tsx src/cli/index.ts status"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "docx": "^9.6.1",
+    "dotenv": "^16.4.5",
+    "inquirer": "^9.2.23",
+    "zenmoney-api": "file:../zenmoney-api"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.15.0",
+    "typescript": "^5.5.0"
+  }
+}

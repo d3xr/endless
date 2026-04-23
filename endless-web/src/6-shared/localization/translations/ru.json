@@ -1,0 +1,589 @@
+{
+  "common": {
+    "btnLogin": "Войти через Дзен-мани",
+    "btnAbout": "О приложении",
+    "haveTrouble": "Не грузится?",
+    "btnAlternativeSignIn": "А если так",
+    "btnDemoMode": "Демо режим",
+    "refresh": "Обновить",
+    "refreshData": "Обновить данные",
+    "leftover": "Остаток",
+    "category": "Категория",
+    "noCategory": "Без категории",
+    "transfer": "Перевод",
+    "outcome": "Расход",
+    "debt": "Долг",
+    "budget": "Бюджет",
+    "available": "Доступно",
+    "activity": "Операции",
+    "transactions": "Операции",
+    "comment": "Комментарий",
+    "currency": "Валюта",
+    "currency_one": "1 валюта",
+    "currency_few": "{{count}} валюты",
+    "currency_many": "{{count}} валют",
+    "currency_other": "{{count}} валют",
+    "moneyDnd": "Деньги",
+    "moneyDnd_1": "Денюбшки",
+    "moneyDnd_2": "Деньжищи",
+    "moneyDnd_3": "ДеНюФфКи",
+    "moneyDnd_4": "Денюшки",
+    "moneyDnd_5": "Денюшечки",
+    "moneyDnd_6": "Денюшонки",
+    "edit": "Изменить",
+    "close": "Закрыть",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "selectCategory": "Выберите категорию",
+    "addCategory": "Добавить категорию",
+    "showAllCategories": "Показать все категории",
+    "mixedCategories": "Разные категории",
+    "showMore": "Показать больше",
+    "iOwe": "Я должен",
+    "iAmOwed": "Мне должны",
+    "tagSelected_zero": "Ничего не выбрано",
+    "tagSelected_one": "{{count}} категория",
+    "tagSelected_few": "{{count}} категории",
+    "tagSelected_many": "{{count}} категорий",
+    "tagSelected_other": "{{count}} категорий",
+    "groupNew": "Новая группа",
+    "tagNull": "Без категории",
+    "tagNew": "Новая категория",
+    "defaultTagGroup": "Категории",
+    "defaultAccountGroup": "Переводы",
+    "defaultMerchantGroup": "Долги",
+    "defaultPayeeGroup": "Долги",
+    "total": "Итого"
+  },
+
+  "errorGlobal": {
+    "message": "Всё сломалось 💩",
+    "btnFix": "Починить 🛠"
+  },
+
+  "errorBoudary": {
+    "title": "Что-то навернулось 👻",
+    "description": "Обновите страницу, а если это не поможет, попробуйте выйти и зайти заново.",
+    "btnRefresh": "Обновить",
+    "btnLogOut": "Выйти",
+    "errorMsg": "Орёт на программистском: {{message}} !1!!"
+  },
+
+  "loadingHints": {
+    "hint": "Загружаемся... 🖤",
+    "hint_1": "Первая загрузка самая долгая 😅",
+    "hint_2": "Всё зависит от интернета и количества операций 🤞",
+    "hint_3": "Может всё-таки загрузится? 🤔",
+    "hint_4": "Что-то долго, попробуйте перезагрузить страницу 🤪"
+  },
+
+  "overspendNotice": {
+    "title": "Перерасход",
+    "description": "Добавьте денег в категории с отрицательным балансом, чтобы быть уверенным в бюджете.",
+    "btn": "Исправить автоматически",
+    "confirm": {
+      "title": "Избавиться от перерасходов?",
+      "okText": "Покрыть перерасходы",
+      "cancelText": "Отмена"
+    }
+  },
+
+  "quickBudgets": {
+    "coverOverspend": "Покрыть перерасход",
+    "dropLeftover": "Сбросить остаток",
+    "avgOutcome_one": "$t(prevOutcome)",
+    "avgOutcome_few": "Средний расход за {{count}} месяца",
+    "avgOutcome_many": "Средний расход за {{count}} месяцев",
+    "avgOutcome_other": "Средний расход за {{count}} месяцев",
+    "avgOutcome_year": "Средний расход за год",
+    "avgOutcome_halfYear": "Средний расход за полгода",
+    "goal": "Цель",
+    "prevBudget": "Прошлый бюджет",
+    "prevOutcome": "Прошлый расход",
+    "sumOfChildren": "Сумма дочерних категорий"
+  },
+
+  "envelopeEditDialog": {
+    "titleNew": "Новая категория",
+    "titleEdit": "Редактирование категории",
+    "nameLabel": "Название",
+    "nameError": "Название точно пригодится 😉",
+    "currencyLabel": "Валюта",
+    "visibilityLabel": "Показывать в бюджете",
+    "visibility": {
+      "auto": "Автоматически",
+      "visible": "Всегда показывать",
+      "hidden": "Всегда скрывать"
+    },
+    "keepIncomeLabel": "Класть доходы в категорию",
+    "btnSave": "Сохранить категорию",
+    "btnCreate": "Создать категорию",
+    "btnCancel": "Отменить",
+    "removeColor": "Убрать цвет"
+  },
+
+  "transactionContextMenu": {
+    "selectSimilar": "Выбрать другие из этой синхронизации",
+    "markViewed": "Пометить просмотренной",
+    "markViewedOlder": "Пометить все ниже просмотренными",
+    "markUnviewed": "Пометить новой",
+    "delete": "Удалить",
+    "restore": "Восстановить"
+  },
+
+  "accounts": {
+    "pageTitle": "Счета",
+    "inBalance": "В балансе",
+    "inBalanceDescription": "Деньги на этих счетах учитываются в бюджете",
+    "other": "Прочее",
+    "otherDescription": "Эти счета не учитываются в бюджете, переводы на них отражаются как расходы. Сюда удобно выносить инвестиционные счета, ипотеку, кредиты и долгосрочные накопления.",
+    "pageDescription": "Список счетов",
+    "archivedAccounts_one": "+{{count}} архивный счёт",
+    "archivedAccounts_few": "+{{count}} архивных счёта",
+    "archivedAccounts_many": "+{{count}} архивных счетов",
+    "archivedAccounts_other": "+{{count}} архивных счетов",
+    "archived": "Архивные",
+    "hideArchived": "Скрыть архивные",
+    "showArchived": "Показать архивные"
+  },
+
+  "analytics": {
+    "pageTitle": "Аналитика",
+    "period_all": "за всё время",
+    "period_year": "за год",
+    "period_3years": "за три года",
+    "period_from": "за период с {{date}}",
+
+    "incomesAndOutcomes": "Доходы и расходы",
+    "income": "Доход",
+    "outcome": "Расход",
+    "netIncome": "Чистый доход",
+    "netOutcome": "Чистый расход",
+    "savingsRate": "Процент сбережений",
+    "savingsRatePositive": "{{percent}} от дохода удалось накопить",
+    "savingsRateNegative": "{{percent}} от дохода потрачено сверх нормы",
+    "details": "детали",
+
+    "netWorth": {
+      "title": "Рост капитала",
+      "lented": "Мне должны",
+      "debts": "Долги",
+      "accountDebts": "Кредиты",
+      "fundsInBudget": "Деньги в балансе",
+      "fundsSaving": "Деньги за балансом",
+      "total": "Всего",
+      "surviveMonths_one": "{{count}} месяц",
+      "surviveMonths_few": "{{count}} месяца",
+      "surviveMonths_many": "{{count}} месяцев",
+      "surviveMonths_other": "{{count}} месяцев",
+      "surviveTagline": "вы можете прожить, не зарабатывая ни копейки",
+      "tooltipCurrentBalance": "Текущий общий баланс",
+      "tooltipAvgExpenses": "Среднемесячные расходы"
+    }
+  },
+
+  "donation": {
+    "pageTitle": "Поддержать приложение",
+    "pageDescription": "",
+    "heading": "Поддержать приложение",
+    "subtitle": "Подпишитесь на патреон или просто переведите любую сумму на развитие проекта. И не забудьте отметить это в бюджете 😉",
+    "patreonTitle": "Patreon",
+    "patreonDescription": "Patreon позволяет регулярно жертвовать комфортную сумму на развитие проекта",
+    "cardTitle": "Перевод на карту",
+    "cardDescription": "Вы всегда можете перевести любую сумму",
+    "afterword": "А ещё обязательно расскажите близким про бюджетирование. О деньгах сложно говорить, но эти знания могут сильно улучшить их жизнь 🖤"
+  },
+
+  "token": {
+    "pageTitle": "Токен",
+    "pageDescription": "",
+    "heading": "⚠️ Внимание",
+    "body": "Токен даёт бессрочный доступ к вашему аккаунту. Приложения используют токен вместо логина и пароля, чтобы получать данные. Используйте его аккуратно и храните в безопасном месте.",
+    "btnHide": "Скрыть токен",
+    "btnShow": "Показать токен"
+  },
+
+  "budgets": {
+    "pageTitle": "Бюджет на {{month}}",
+    "budgetedThisMonth": "Бюджет в этом месяце",
+    "leftoverFromLastMonth": "Остаток с прошлого месяца",
+    "leftoverFrom": "Остаток с {{month}}",
+    "availableFor": "Доступно на",
+    "balanceFor": "Баланс на",
+    "balanceChartTooltip": "Сплошная линия показывает изменение баланса в этом месяце. Пунктирная — в прошлом.",
+    "availableTitleNow": "Доступно сейчас",
+    "availableTitleFuture_1": "Будет доступно в январе",
+    "availableTitleFuture_2": "Будет доступно в феврале",
+    "availableTitleFuture_3": "Будет доступно в марте",
+    "availableTitleFuture_4": "Будет доступно в апреле",
+    "availableTitleFuture_5": "Будет доступно в мае",
+    "availableTitleFuture_6": "Будет доступно в июне",
+    "availableTitleFuture_7": "Будет доступно в июле",
+    "availableTitleFuture_8": "Будет доступно в августе",
+    "availableTitleFuture_9": "Будет доступно в сентябре",
+    "availableTitleFuture_10": "Будет доступно в октябре",
+    "availableTitleFuture_11": "Будет доступно в ноябре",
+    "availableTitleFuture_12": "Будет доступно в декабре",
+    "availableTitlePast_1": "Осталось в конце января",
+    "availableTitlePast_2": "Осталось в конце февраля",
+    "availableTitlePast_3": "Осталось в конце марта",
+    "availableTitlePast_4": "Осталось в конце апреля",
+    "availableTitlePast_5": "Осталось в конце мая",
+    "availableTitlePast_6": "Осталось в конце июня",
+    "availableTitlePast_7": "Осталось в конце июля",
+    "availableTitlePast_8": "Осталось в конце августа",
+    "availableTitlePast_9": "Осталось в конце сентября",
+    "availableTitlePast_10": "Осталось в конце октября",
+    "availableTitlePast_11": "Осталось в конце ноября",
+    "availableTitlePast_12": "Осталось в конце декабря",
+    "inEnvelopes": "В категориях",
+    "inEnvelopesTooltip": "Эта сумма сейчас лежит в категориях (столбец «Доступно»)",
+    "inBalance": "В балансе",
+    "budgetedInFuture": "Распределено в будущем",
+    "budgetedInFutureTooltip": "Эти деньги зарезервированы под будущие бюджеты",
+    "toBeBudgeted": "Свободно",
+    "notAllocated": "Не распределено",
+    "allAllocated": "Деньги распределены",
+    "toBeBudgetedTooltip": "Нераспределённые деньги",
+    "explainer": {
+      "overspend": "Добавьте денег в категории с перерасходом.",
+      "hasFreeMoney": "Выглядит замечательно! Распределите свободные деньги, чтобы было совсем хорошо.",
+      "negativeBalance": "Кажется, у вас отрицательный баланс, поэтому распределять нечего. Кредиты лучше всего унести за баланс.",
+      "zeroToBeBudgeted": "Все деньги распределены, так держать!",
+      "budgetedMoreThanHave": "Вы распределили больше денег, чем у вас есть. На что-то может не хватить. Чтобы исправить, выложите излишки из категорий."
+    },
+    "moveUp": "Поднять выше",
+    "moveDown": "Опустить ниже",
+    "createEnvelope": "Создать категорию",
+    "categories": "Категории",
+    "categories_all": "Категории (все)",
+    "parentOverspend": "Перерасход в родительской категории.\nУвеличьте бюджет на {{amount}}.",
+    "isSelf": "(основная)",
+    "envelopeCurrencyTooltip": "Бюджет этой категории задаётся в {{currency}}. Он автоматически будет пересчитываться по текущему курсу.",
+    "goal": "Цель",
+    "addGoal": "Добавить цель",
+    "activityStats": {
+      "incomes": "Доходы",
+      "outcomes": "Расходы",
+      "transfers": "Переводы",
+      "debts": "Долги",
+      "fxDifference": "Курсовая разница",
+      "unknownCategory": "Неизвестная категория",
+      "yearlyExpenses": "Расходы за год",
+      "noCategory": "Без категории",
+      "combineIntoParentCategories": "Объединить всё в родительские категории",
+      "parentCategories": "Объединить дочерние",
+      "showLess": "Показать меньше",
+      "showAll": "Показать все ({{count}})",
+      "otherCategories": "Остальные категории"
+    },
+    "statisticWidget": {
+      "average": "Средний",
+      "avgBudgeted": "бюджет",
+      "avgExpenses": "расход",
+      "over": "за",
+      "months3": "3 месяца",
+      "months6": "6 месяцев",
+      "months12": "год",
+      "avgForDate": "Среднее на {{date}}"
+    },
+    "actions": {
+      "actions": "Действия",
+      "close": "Закрыть",
+      "copyAllBudgets": {
+        "trigger": "Копировать с прошлого месяца",
+        "title": "Скопировать все бюджеты?",
+        "description": "Бюджеты будут точно такими же, как в предыдущем месяце.",
+        "okText": "Скопировать",
+        "cancelText": "Отмена"
+      },
+      "fixOverspends": {
+        "trigger": "Покрыть перерасходы",
+        "title": "Избавиться от перерасходов?",
+        "okText": "Покрыть перерасходы",
+        "cancelText": "Отмена"
+      },
+      "startAgain": {
+        "trigger": "Сбросить все остатки",
+        "title": "Хотите начать всё заново?",
+        "description": "Остатки во всех категориях сбросятся, а бюджеты в будущем удалятся. Вы сможете начать распределять деньги с чистого листа. Меняются только бюджеты, все остальные данные останутся как есть.",
+        "okText": "Сбросить остатки",
+        "cancelText": "Отмена"
+      },
+      "completeAllGoals": {
+        "trigger": "Выполнить все цели",
+        "title": "Выполнить все цели?",
+        "description": "Бюджеты будут выставлены так, чтобы цели в этом месяце выполнились.",
+        "okText": "Выполнить цели",
+        "cancelText": "Отмена"
+      }
+    }
+  },
+
+  "creatingNewGroup": {
+    "okDropIt": "Ага, отпускай",
+    "categoryNeeded": "Надо перетащить именно категорию",
+    "dropCategoryHere": "Кидай сюда категорию",
+    "newGroup": "Новая группа"
+  },
+
+  "envelopeTableMenu": {
+    "showAllEnvelopes": "Показать все категории",
+    "showPrtiallyEnvelopes": "Скрыть часть категорий",
+    "goToEditMode": "Режим редактирования",
+    "leaveEditMode": "Выйти из режима редактирования"
+  },
+
+  "accountContextMenu": {
+    "moveInBalance": "Включить в баланс",
+    "moveFromBalance": "Исключить из баланса"
+  },
+
+  "confirmDefaults": {
+    "title": "Вы уверены?",
+    "cancelText": "Отменить",
+    "okText": "OK"
+  },
+
+  "fxRates": {
+    "title": "Курсы на {{date}}",
+    "title_current": "Курсы на {{date}} (текущие)",
+    "reset": "Сбросить",
+    "download": "Загрузить курсы"
+  },
+
+  "goals": {
+    "goalType": "Тип цели",
+    "progressOnTagret": "{{budgeted}} из {{target}}",
+    "names": {
+      "monthly": "Регулярные сбережения",
+      "monthlySpend": "Сумма на месяц",
+      "targetBalance": "Накопить сумму",
+      "incomePercent": "Процент от дохода"
+    },
+    "inputLabels": {
+      "monthly": "Откладывать каждый месяц",
+      "monthlySpend": "Нужно на месяц",
+      "targetBalance": "Хочу накопить",
+      "incomePercent": "Процент от дохода"
+    },
+    "tillDate": "К определённой дате",
+    "remove": "Удалить цель",
+    "save": "Сохранить цель",
+    "goalsProgress": "Цели {{percent}}%",
+    "completeAll": {
+      "title": "Выполнить все цели?",
+      "description": "Бюджеты будут выставлены так, чтобы цели в этом месяце выполнились.",
+      "okText": "Выполнить цели",
+      "cancelText": "Отмена"
+    },
+    "toWords": {
+      "monthly": "Откладываю {{sum}} каждый месяц",
+      "monthlySpend": "Нужно {{sum}} на месяц",
+      "targetBalance": "Хочу накопить {{sum}}",
+      "targetBalanceToDate": "Xочу накопить {{sum}} к {{month}}",
+      "incomePercent": "Откладываю {{percent}}% от дохода",
+      "till": "к {{month}}",
+      "till_1": "к январю",
+      "till_2": "к февралю",
+      "till_3": "к марту",
+      "till_4": "к апрелю",
+      "till_5": "к маю",
+      "till_6": "к июню",
+      "till_7": "к июлю",
+      "till_8": "к августу",
+      "till_9": "к сентябрю",
+      "till_10": "к октябрю",
+      "till_11": "к ноябрю",
+      "till_12": "к декабрю"
+    }
+  },
+
+  "reciept": {
+    "unknown": "Неизвестный формат чека 🤷🏻‍♂️",
+    "sum": "Сумма",
+    "date": "Дата",
+    "fn": "ФН",
+    "fp": "ФП",
+    "i": "ФД"
+  },
+
+  "navigation": {
+    "settings": "Настройки",
+    "budget": "Бюджет",
+    "transactions": "Операции",
+    "yearWrapped": "Итоги года",
+    "about": "Как пользоваться",
+    "stats": "Аналитика",
+    "accounts": "Счета",
+    "donate": "Поддержать проект"
+  },
+
+  "settings": {
+    "settings": "Настройки",
+    "language": "Язык",
+    "advancedSettings": "Расширенные настройки...",
+    "export": "Экспорт",
+    "downloadCSV": "Скачать CSV",
+    "fullBackup": "Полный бэкап",
+    "darkMode": "Тёмная тема",
+    "lightMode": "Светлая тема",
+    "reloadData": "Перезагрузить данные",
+    "regularSync": "Автосинхронизация",
+    "useIcons": "Использовать иконки",
+    "useEmojis": "Использовать эмодзи",
+    "useZmBudgets": "Бюджеты Дзен-мани",
+    "useZmBudgetsDescription": "Использовать те же бюджеты что и ДМ",
+    "convertBudgetsFromZm": "Конвертировать бюджеты из Дзен-мани",
+    "budgetsConverted": "✅ Бюджеты сконвертированы ({{budgets}})",
+    "logOut": "Выйти",
+    "version": "Версия: {{version}}"
+  },
+
+  "transactions": {
+    "pageTitle": "Операции",
+    "pageDescription": "Список операций",
+    "emptyState": "Таких операций нет.\nВозможно, дело в фильтрах."
+  },
+
+  "transaction": {
+    "otcomeFrom": "Расход c {{account}}",
+    "incomeTo": "Доход на {{account}}",
+    "date": "Дата",
+    "time": "Время",
+    "payee": "Место платежа",
+    "comment": "Комментарий",
+    "created": "Операция создана – {{date}}",
+    "changed": "Операция изменена – {{date}}",
+    "btnOtherFromSync": "Другие из этой синхронизации",
+    "type_income": "Доход",
+    "type_outcome": "Расход",
+    "type_transfer": "Перевод",
+    "type_debt": "Долг",
+    "transactionDeleted": "Операция удалена",
+    "btnRestore": "Восстановить",
+    "btnDelete": "Удалить",
+    "btnSave": "Сохранить",
+    "btnClose": "Закрыть",
+    "rate": "Курс: {{rate}}",
+    "fullEmptyState": "Выберите операцию,\nчтобы увидеть детали"
+  },
+
+  "transactionsBulkEdit": {
+    "editTransactions": "Редактирование операций",
+    "categories": "Категории",
+    "comment": "Комментарий",
+    "cancel": "Отмена",
+    "save": "Применить изменения"
+  },
+
+  "transactionActions": {
+    "selected_one": "Выбрана {{count}} операция",
+    "selected_few": "Выбрано {{count}} операции",
+    "selected_many": "Выбрано {{count}} операций",
+    "selected_other": "Выбрано {{count}} операций",
+    "delete_one": "Удалить {{count}} операцию?",
+    "delete_few": "Удалить {{count}} операции?",
+    "delete_many": "Удалить {{count}} операций?",
+    "delete_other": "Удалить {{count}} операций?",
+    "deleteBtn": "Удалить",
+    "cancelDeletion": "Оставить",
+    "deleteSelected": "Удалить выбранные",
+    "setCategory": "Выставить категорию",
+    "actions": "Действия",
+    "markViewed": "Пометить просмотренными",
+    "edit": "Редактировать",
+    "combineToOutcome": "Объединить в расход",
+    "combineToOutcomeComment": "Возвраты удалятся или станут переводами",
+    "combineToIncome": "Объединить в доход",
+    "combineToIncomeComment": "Расходы удалятся или станут переводами",
+    "mergeTransactions": "Схлопнуть операции",
+    "mergeTransactionsComment": "Они просто удалятся 😉",
+    "mergeAsTransfer": "Объединить в перевод",
+    "mergeAsTransferComment": "Две транзакции станут переводом между счетами",
+    "selectAll": "Выбрать все"
+  },
+
+  "filterDrawer": {
+    "filter": "Фильтр",
+    "close": "Закрыть",
+    "searchComments": "Поиск по комментариям",
+    "amountFrom": "Сумма от",
+    "amountTo": "Сумма до",
+    "dateFrom": "Дата от",
+    "dateTo": "Дата до",
+    "transactionType": "Тип операции",
+    "transactionType_all": "Все операции",
+    "transactionType_outcome": "Расходы",
+    "transactionType_transfer": "Переводы",
+    "transactionType_income": "Доходы",
+    "onlyNew": "Только новые",
+    "showDeleted": "Показать удалённые",
+    "clearFilter": "Очистить фильтры",
+    "clearField": "Очистить поле",
+    "extendedFilters": "Расширенные фильтры"
+  },
+
+  "yearReview": {
+    "yearReview": "ИТОГИ ГОДА",
+    "whatWasInPreviousYear": "А что было в прошлом году?",
+
+    "incomeCard": {
+      "youEarned": "Вы заработали",
+      "perMonth": "в месяц"
+    },
+
+    "outcomeCard": {
+      "purchaseOfTheYear": "Покупка года #{{number}}"
+    },
+
+    "savingsCard": {
+      "youSaved": "Вы накопили",
+      "savingsPercent": "Это {{percent}}% от вашего дохода.",
+      "greatJob": "Отличная работа!",
+      "goodJob": "Неплохо!",
+      "savingsMonths": "При таких тратах этих накоплений вам может хватить на {{months}} месяцев жизни без дохода",
+      "savingsMonths_one": "При таких тратах этих накоплений вам может хватить на {{months}} месяц жизни без дохода",
+      "savingsMonths_few": "При таких тратах этих накоплений вам может хватить на {{months}} месяца жизни без дохода",
+      "savingsMonths_many": "При таких тратах этих накоплений вам может хватить на {{months}} месяцев жизни без дохода",
+      "savingsMonths_other": "При таких тратах этих накоплений вам может хватить на {{months}} месяцев жизни без дохода"
+    },
+
+    "noCategory": {
+      "title_one": "{{count}} операция",
+      "title_few": "{{count}} операции",
+      "title_many": "{{count}} операций",
+      "title_other": "{{count}} операций",
+      "withoutCategory_one": "не нашла свою категорию",
+      "withoutCategory_few": "не нашли свою категорию",
+      "withoutCategory_many": "не нашли свою категорию",
+      "withoutCategory_other": "не нашли свою категорию",
+      "allTransactionsHaveCategories": "Круто! Ни одной операции без категории!"
+    },
+
+    "qrCard": {
+      "youAttached": "Вы прикрепили",
+      "receipt_one": "{{count}} чек",
+      "receipt_few": "{{count}} чека",
+      "receipt_many": "{{count}} чеков",
+      "receipt_other": "{{count}} чеков"
+    },
+
+    "payeeByFrequency": {
+      "favouritePlace": "Любимое место #{{number}}",
+      "purchase_one": "{{count}} покупка со средним чеком ",
+      "purchase_few": "{{count}} покупки со средним чеком ",
+      "purchase_many": "{{count}} покупок со средним чеком ",
+      "purchase_other": "{{count}} покупок со средним чеком ",
+      "andTotalSpend": "А всего потратили "
+    },
+
+    "payeeByOutcome": {
+      "spentHere ": "Здесь вы оставили ",
+      " purchase_one": " ({{count}} покупка)",
+      " purchase_few": " ({{count}} покупки)",
+      " purchase_many": " ({{count}} покупок)",
+      " purchase_other": " ({{count}} покупок)"
+    }
+  }
+}

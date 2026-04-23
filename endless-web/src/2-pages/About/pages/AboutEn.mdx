@@ -1,0 +1,91 @@
+import { ExampleBox, Muted } from '../Components'
+import wholeImg from './whole-screenshot.png'
+import { Box } from '@mui/material'
+import { Head } from '../Head'
+
+<Head
+  title="What is Endless?"
+  description="Endless helps you manage personal and family budget."
+/>
+
+# 👋 Hello!
+
+Endless is an unofficial app for [Zenmoney](https://zenmoney.app/), it helps to plan your finances correctly.
+
+<ExampleBox symbol="🖤">
+  Endless is free, but you can always
+  [buy me a coffee](/donation).
+
+  <Muted>Be sure to write what you liked</Muted>
+</ExampleBox>
+
+<Box
+  component="img"
+  src={wholeImg}
+  alt="This is roughly what the interface looks like"
+  sx={{
+    maxWidth: '100%',
+    borderRadius: 1,
+    border: '1px solid rgba(128,128,128,0.2)',
+    boxShadow: '0 8px 32px 0 rgba(0,0,0,0.2)',
+  }}
+/>
+
+## What's inside?
+
+### Budgets
+
+The main advantage of Endless is envelope-type budgets. If you've used YNAB, you know how cool this is. Read about the budgeting approach to get a better understanding.
+
+- [Budgeting Approach in Endless](/about/method)
+- [Getting Started](/about/quick-start)
+
+### Fixing Corrections
+
+Sometimes after syncing with the bank, duplicate transactions appear, to catch them:
+
+1. Open the duplicate transaction
+2. Click "Others from this sync" at the bottom
+3. Now you can view these transactions and delete them if necessary
+
+### And more...
+
+- Restoring deleted transactions
+- Dark mode 🌚
+- Group actions with transactions: changing categories and deletion.
+- Full backup of all data (without restoration yet)
+
+## How to install the app?
+
+Endless is a web application. It's as cool as regular apps (can even work offline), and is installed directly from the browser ✨
+
+- **iPhone.** In Safari "Share" → "Add to Home Screen"
+- **Android.** In Chrome three dots in the top right corner → "Add to Home Screen"
+- **Windows / MacOS.** In Chrome icon in the address bar "Open in app"
+
+## A few words about security
+
+<ExampleBox symbol="🔒">
+  Endless does not have access to your banking connections. Zenmoney stores these data
+  in your app and does not transmit through API, third-party services simply do not have
+  access to them.
+
+  [API Documentation](https://github.com/zenmoney/ZenPlugins/wiki/ZenMoney-API)
+</ExampleBox>
+
+- Endless does not store anything on its own. Data is stored locally on your computer and in Zenmoney.
+- Endless collects only anonymous statistics like the number of visits.
+
+## Useful links
+
+<ExampleBox symbol="💵">
+  [Approach to Budgets in Endless](/about/method) →
+
+  <Muted>How to use budgets</Muted>
+</ExampleBox>
+
+<ExampleBox symbol="🚀">
+  [Getting Started with Endless](/about/quick-start) →
+
+  <Muted>This guide will help you tackle initial problems</Muted>
+</ExampleBox>
